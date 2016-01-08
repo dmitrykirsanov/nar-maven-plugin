@@ -60,6 +60,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
   private final boolean libtool;
   private final CommandLineCompiler libtoolCompiler;
   private final boolean newEnvironment;
+  private File workDir;
 
   protected CommandLineCompiler(final String command, final String identifierArg, final String[] sourceExtensions,
       final String[] headerExtensions,
@@ -233,7 +234,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
         ArrayList<String> commandline = new ArrayList<String>(commandlinePrefix);
         commandline.addAll(commandlineSuffix);
-        final int ret = runCommand(task, outputDir,
+        final int ret = runCommand(task, workDir,
             commandline.toArray(new String[commandline.size()]));
         if (ret != 0) { retval = ret; }
       }
@@ -278,6 +279,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       final VersionInfo versionInfo) {
 
     this.prefix = specificDef.getCompilerPrefix();
+    this.workDir = specificDef.getWorkDir();
 
     final Vector<String> args = new Vector<String>();
     final CompilerDef[] defaultProviders = new CompilerDef[baseDefs.length + 1];
@@ -506,6 +508,10 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
   protected final boolean getLibtool() {
     return this.libtool;
+  }
+  
+  protected final File getWorkDir() {
+      return workDir;
   }
 
   /**
